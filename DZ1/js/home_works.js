@@ -19,13 +19,26 @@ document.getElementById('gmail_button').addEventListener('click', () => {
 
 const parentBlock = document.querySelector('.parent_block');
 const childBlock = document.querySelector('.child_block');
+const blockSize = childBlock.offsetWidth;
+const parentWidth = parentBlock.offsetWidth;
+const parentHeight = parentBlock.offsetHeight;
 
-// Функция для движения маленького блока вправо внутри родительского блока
-const moveRight = (distance) => {
-    childBlock.style.left = `${distance}px`;
-    if (distance < parentBlock.offsetWidth - childBlock.offsetWidth) {
-        setTimeout(() => moveRight(distance + 1), 10); // Рекурсивный вызов с увеличением расстояния
+let x = 0;
+let y = 0;
+let dx = 1;
+let dy = 0;
+
+const move = () => {
+    if (x >= parentWidth - blockSize || x < 0 || y >= parentHeight - blockSize || y < 0) {
+        const temp = dx;
+        dx = dy;
+        dy = -temp;
     }
+    x += dx;
+    y += dy;
+    childBlock.style.left = `${x}px`;
+    childBlock.style.top = `${y}px`;
+    requestAnimationFrame(move);
 };
 
-moveRight(0); // Начать движение с 0
+move();
